@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: test-ingress
+  annotations:
+    #networking.gke.io/managed-certificates: guwenpage-managed
+    #ingress.gcp.kubernetes.io/pre-shared-cert: "guwenpageself" 
+    #kubernetes.io/ingress.global-static-ip-name: "ingress-ip"
+    kubernetes.io/ingress.class: "gce"
+spec:
+  defaultBackend:
+    service:
+      name: nginx-nodeport
+      port:
+        number: 80
+  rules:
+  - http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: nginx-nodeport
+            port:
+              number: 80
+      - path: /test/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: hello-app-nodeport
+            port:
+              number: 60000

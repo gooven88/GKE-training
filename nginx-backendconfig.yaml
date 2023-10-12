@@ -1,0 +1,37 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: nginx-backendconfig
+spec:
+  logging:
+    enable: true
+    sampleRate: 1
+  timeoutSec: 40
+  cdn:
+    enabled: true
+  connectionDraining:
+    drainingTimeoutSec: 60
+  healthCheck:
+    checkIntervalSec: 20
+    timeoutSec: 2
+    healthyThreshold: 1
+    unhealthyThreshold: 3
+    type: HTTP
+    requestPath: /
+    port: 80
+  securityPolicy:
+    name: "test-policy"  #bind backend with security policy "test-policy"
+  sessionAffinity:
+    affinityType: "CLIENT_IP"
+  customRequestHeaders:
+    headers:
+    - "X-Client-Region:{client_region}"
+    - "X-Client-City:{client_city}"
+    - "X-Client-CityLatLong:{client_city_lat_long}"
+  customResponseHeaders:
+    headers:
+    - "hsts:True"
+    - "hsts-include-subdomains: True"
+    - "hsts-max-age: 28800"
+  connectionDraining:
+    drainingTimeoutSec: 10
